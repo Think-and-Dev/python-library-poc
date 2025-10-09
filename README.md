@@ -2,13 +2,13 @@
 
 This project is a proof-of-concept demonstrating a Python monorepo structure where multiple independent libraries are consumed by a separate application.
 
--   `my_monorepo`: Contains the individual libraries (`adder`, `subtractor`).
--   `consumer_app`: A separate application that uses the libraries from the monorepo, managed with Poetry.
+- `my_monorepo`: Contains the individual libraries (`adder`, `subtractor`).
+- `consumer_app`: A separate application that uses the libraries from the monorepo, managed with Poetry.
 
 ## Requirements
 
--   [Python](https://www.python.org/) (Version 3.12+ is recommended)
--   [Poetry](https://python-poetry.org/) for dependency management.
+- [Python](https://www.python.org/) (Version 3.12+ is recommended)
+- [Poetry](https://python-poetry.org/) for dependency management.
 
 ## Local Setup and Testing
 
@@ -19,8 +19,8 @@ Follow these steps to set up and run the project locally.
 If you haven't already, clone the repository to your local machine.
 
 ```bash
-git clone <your-repository-url>
-cd monorepo
+git clone https://github.com/Think-and-Dev/python-library-poc
+cd python-library-poc
 ```
 
 ### 2. Navigate to the Consumer App
