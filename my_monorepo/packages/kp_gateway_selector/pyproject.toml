@@ -51,5 +51,5 @@ pytest = "^8.0"
 test = "pytest:main"
 
 [tool.pytest.ini_options]
-pythonpath = ["my_monorepo/packages"]
+pythonpath = [".."]
 addopts = "-q"
