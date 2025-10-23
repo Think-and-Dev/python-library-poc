@@ -5,7 +5,7 @@ description = "A library for dynamic payment gateway selection based on configur
 authors = [
     {name = "KP team",email = "devs@kp.com"}
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.9,<4.0"
 dependencies = [
     "pydantic>=2.0",
     "SQLAlchemy>=1.4",
@@ -22,3 +22,34 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["kp_gateway_selector", "kp_gateway_selector.gateway_selector", "kp_gateway_selector.gateway_selector.compiler", "kp_gateway_selector.gateway_selector.matchers", "kp_gateway_selector.postgresql", "kp_gateway_selector.postgresql.gateway_selector", "kp_gateway_selector.utils"]
+
+[tool.poetry.build]
+script = ""
+
+
+[tool.poetry]
+name = "kp-gateway-selector"
+version = "0.1.0"
+description = "A library for dynamic payment gateway selection based on configurable rules."
+authors = ["KP team <devs@kp.com>"]
+packages = [{ include = "kp_gateway_selector" }]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+pydantic = ">=2.0"
+SQLAlchemy = ">=1.4"
+redis = ">=4.0"
+cryptography = ">=3.0"
+fastapi = ">=0.111"
+typing-extensions = ">=4.7"
+"asgi-correlation-id" = { version = ">=4.0", python = ">=3.9,<4.0" }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+
+[tool.poetry.scripts]
+test = "pytest:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["my_monorepo/packages"]
+addopts = "-q"
