@@ -1,8 +1,6 @@
 from typing import List, Any, Dict, Optional
-from pydantic import TypeAdapter
 from sqlalchemy.orm import Session
 
-from cache.redis_base_cache import RedisBaseCache
 from gateway_selector_v2.compiler.ruleset_compiler import Repo
 from gateway_selector_v2.dtos import GatewaySelectorRuleSetDTO, GatewaySelectorRuleDTO, GatewaySelectorGatewayConfigDTO
 from .models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
@@ -26,47 +24,6 @@ class DatabaseRepo(Repo):
     async def get_gateways_map(self) -> Dict[str, GatewaySelectorGatewayConfigDTO]:
         gateways = self.db.query(GatewaySelectorGatewayConfig).all()
         return {gw.name: GatewaySelectorGatewayConfigDTO.model_validate(gw) for gw in gateways}
-
-class DatabaseRepoWithCache(DatabaseRepo):
-    RulesAdapter = TypeAdapter(List[GatewaySelectorRuleDTO])
-    GatewaysMapAdapter = TypeAdapter(Dict[str, GatewaySelectorGatewayConfigDTO])
-    def __init__(self, db: Session, ttl_gateways: int|None = None, ttl_ruleset: int|None = None, ttl_active_ruleset: int|None = None):
-        super().__init__(db)
-        self.cache_gateways = RedisBaseCache[str]()
-        self.cache_ruleset = RedisBaseCache[str]()
-        self.cache_active_ruleset = RedisBaseCache[str]()
-        prefix = "gateway_selector_v2"
-        self.cache_gateways._prefix = prefix
-        self.cache_ruleset._prefix = prefix
-        self.cache_active_ruleset._prefix = prefix
-        self.ttl_gateways = ttl_gateways if ttl_gateways is not None else 300 # Default to 300 seconds
-        self.ttl_ruleset = ttl_ruleset if ttl_ruleset is not None else 300 # Default to 300 seconds
-        self.ttl_active_ruleset = ttl_active_ruleset if ttl_active_ruleset is not None else 300 # Default to 300 seconds
-
-    async def get_active_ruleset(self) -> Optional[GatewaySelectorRuleSetDTO]:
-        if self.cache_active_ruleset.get("active_ruleset") is None:
-            active_ruleset = await super().get_active_ruleset()
-            if active_ruleset is not None:
-                self.cache_active_ruleset.set("active_ruleset", active_ruleset.model_dump_json(), ttl=self.ttl_active_ruleset)
-            return active_ruleset
-        cached_value = self.cache_active_ruleset.get("active_ruleset")
-        return GatewaySelectorRuleSetDTO.model_validate_json(cached_value) if cached_value is not None else None
-
-    async def get_rules_for_ruleset(self, ruleset_id: int) -> List[GatewaySelectorRuleDTO]:
-        if self.cache_ruleset.get(f"rules_for_ruleset_{ruleset_id}") is None:
-            rules_for_ruleset = await super().get_rules_for_ruleset(ruleset_id)
-            self.cache_ruleset.set(f"rules_for_ruleset_{ruleset_id}", self.RulesAdapter.dump_json(rules_for_ruleset).decode("utf-8"), ttl=self.ttl_ruleset)
-            return rules_for_ruleset
-        cached_value = self.cache_ruleset.get(f"rules_for_ruleset_{ruleset_id}")
-        return self.RulesAdapter.validate_json(cached_value) if cached_value is not None else []
-
-    async def get_gateways_map(self) -> Dict[str, GatewaySelectorGatewayConfigDTO]:
-        if self.cache_gateways.get("gateways_map") is None:
-            gateways_map = await super().get_gateways_map()
-            self.cache_gateways.set("gateways_map", self.GatewaysMapAdapter.dump_json(gateways_map).decode("utf-8"), ttl=self.ttl_gateways)
-            return gateways_map
-        cached_value = self.cache_gateways.get("gateways_map")
-        return self.GatewaysMapAdapter.validate_json(cached_value) if cached_value is not None else {}
 
 # --- Added write operations for testing purposes ---
 

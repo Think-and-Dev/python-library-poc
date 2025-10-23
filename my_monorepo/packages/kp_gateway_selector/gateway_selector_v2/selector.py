@@ -5,16 +5,10 @@ from typing import Dict, Any, Optional
 from hashlib import sha256
 from uuid import uuid4
 
-
-from sqlalchemy.orm import Session
-
-from gateway_selector_v2.compiler.ruleset_compiler import CompiledRuleset, CompiledRule, compile_ruleset
-from gateway_selector_v2.context import GatewaySelectorCtx, make_ctx
-from utils.enumerators import PaymentGateway
-from postgresql.gateway_selector_v2.database_repo import DatabaseRepoWithCache
+from gateway_selector_v2.compiler.ruleset_compiler import CompiledRuleset, CompiledRule
+from gateway_selector_v2.context import GatewaySelectorCtx
 from postgresql.gateway_selector_v2.models import GatewaySelectorGatewayConfig
-import logging
-logger = logging.getLogger(__name__)
+
 # ---------------------------------------------------------
 # Estructuras de salida (útiles para log/telemetría)
 # ---------------------------------------------------------
@@ -144,7 +138,7 @@ def resolve_action(
 # Gateway selector (hot path)
 # ---------------------------------------------------------
 
-def _gateway_selector_v2(
+def select_gateway(
     ctx: GatewaySelectorCtx,
     snapshot: CompiledRuleset,
     *,
@@ -194,19 +188,3 @@ def _gateway_selector_v2(
     dec = Decision(None, None, None, reason)
     if on_decision: on_decision(dec, ctx)
     return None, dec
-
-async def gateway_selector_v2(auth, pix_key, db: Session, pix_key_type: Optional[str] = None, amount: Optional[str] = None, debug: bool = False, on_decision: Optional[callable] = None) -> PaymentGateway:
-    # TODO: generar el snapshot fuera del "hot path", en base a signaling desde db y/o backoffice
-    repo = DatabaseRepoWithCache(db)
-    snapshot = await compile_ruleset(repo, debug=debug, capture_ctx_keys=True)
-    ctx = make_ctx(api_user_id=auth["api_user_id"], pix_key=pix_key, pix_key_type=pix_key_type)
-    gw, _ = _gateway_selector_v2(ctx, snapshot, allow_fallback=True, on_decision=on_decision)
-    # mapeamos a un PaymentGateway
-    if gw:
-        logger.debug(msg=f"Gateway found: {gw.name}")
-        try:
-            return PaymentGateway(gw.id)
-        except ValueError as e:
-            logger.error(msg=f"Invalid gateway ID: {gw.id}, error: {e}. Returning default")
-    logger.debug(msg=f"No gateway found, returning default E2E")
-    return PaymentGateway.E2E
