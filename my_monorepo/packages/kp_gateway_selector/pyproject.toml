@@ -11,6 +11,9 @@ dependencies = [
     "SQLAlchemy>=1.4",
     "redis>=4.0",
     "cryptography>=3.0",
+    "fastapi>=0.111",
+    "typing-extensions>=4.7",
+    "asgi-correlation-id>=4.0",
 ]
 
 [build-system]
@@ -18,4 +21,4 @@ requires = ["poetry-core>=2.0.0,<3.0.0", "setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["kp_gateway_selector", "kp_gateway_selector.gateway_selector", "kp_gateway_selector.postgresql", "kp_gateway_selector.utils"]
+packages = ["kp_gateway_selector", "kp_gateway_selector.gateway_selector", "kp_gateway_selector.gateway_selector.compiler", "kp_gateway_selector.gateway_selector.matchers", "kp_gateway_selector.postgresql", "kp_gateway_selector.postgresql.gateway_selector", "kp_gateway_selector.utils"]

@@ -2,17 +2,18 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, Protocol, Tuple
 
-from utils.pix_key_types import PixKeyTypes
-from dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
+from kp_gateway_selector.utils.pix_key_types import PixKeyTypes
+from kp_gateway_selector.gateway_selector.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
 
-from .rule_compiler import compile_predicate, Matcher
-from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig
+from kp_gateway_selector.gateway_selector.compiler.rule_compiler import compile_predicate
+from kp_gateway_selector.gateway_selector.matchers.base import Matcher
+from kp_gateway_selector.postgresql.gateway_selector.models import GatewaySelectorGatewayConfig
 
 # --------------------------------------------------------------------
 # Estructuras de datos del snapshot (inmutables para seguridad)
 # --------------------------------------------------------------------
 
-from utils.logs import setup_logger_json
+from kp_gateway_selector.utils.logs import setup_logger_json
 
 logger = setup_logger_json("DEBUG", "kp_gateway_selector.ruleset_compiler")
 
@@ -49,7 +50,7 @@ class CompiledRuleset:
     default_gateway: Optional[str]
 
     # Telemetría/metadatos útiles
-    loaded_at_ms: int
+    loaded_at_ms: float
     total_rules: int
 
 # --------------------------------------------------------------------

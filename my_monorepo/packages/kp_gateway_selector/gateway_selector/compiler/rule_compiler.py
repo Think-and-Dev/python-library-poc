@@ -2,8 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Any, Tuple, Callable, Optional, List
 
-from matchers.base import Matcher, build_matcher
-from matchers.debug import DebugWrap
+from kp_gateway_selector.gateway_selector.matchers.base import Matcher, build_matcher
+from kp_gateway_selector.gateway_selector.matchers.debug import DebugWrap
 
 # --- Constantes útiles (evitan ifs en runtime) ---
 

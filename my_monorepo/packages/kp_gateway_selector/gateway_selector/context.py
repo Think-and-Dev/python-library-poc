@@ -7,7 +7,7 @@ from typing_extensions import NotRequired # Not available in 'typing' module for
 
 from fastapi import Request
 
-from utils.pix_key_types import PixKeyTypes
+from kp_gateway_selector.utils.pix_key_types import PixKeyTypes
 
 PixKeyType = Literal[
     PixKeyTypes.QRCODE,

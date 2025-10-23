@@ -6,7 +6,7 @@ from typing import Any, Optional
 import uuid
 
 from asgi_correlation_id import CorrelationIdFilter
-from postgresql.database import LOG_SOURCE
+from kp_gateway_selector.postgresql.database import LOG_SOURCE
 
 
 class CustomFormatter(logging.Formatter):

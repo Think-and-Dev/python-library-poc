@@ -5,9 +5,9 @@ from typing import Dict, Any, Optional
 from hashlib import sha256
 from uuid import uuid4
 
-from gateway_selector.compiler.ruleset_compiler import CompiledRuleset, CompiledRule
-from gateway_selector.context import GatewaySelectorCtx
-from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig
+from kp_gateway_selector.gateway_selector.compiler.ruleset_compiler import CompiledRuleset, CompiledRule
+from kp_gateway_selector.gateway_selector.context import GatewaySelectorCtx
+from kp_gateway_selector.postgresql.gateway_selector.models import GatewaySelectorGatewayConfig
 
 # ---------------------------------------------------------
 # Estructuras de salida (útiles para log/telemetría)

@@ -7,7 +7,7 @@ from .base import Matcher
 
 LogFn = Callable[[str], None]  # ej. logger.debug
 
-from utils.logs import setup_logger_json
+from kp_gateway_selector.utils.logs import setup_logger_json
 
 logger = setup_logger_json("DEBUG", "kp_gateway_selector.matchers.debug")
 
