@@ -6,14 +6,15 @@ from utils.pix_key_types import PixKeyTypes
 from dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
 
 from .rule_compiler import compile_predicate, Matcher
-from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
+from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig
 
 # --------------------------------------------------------------------
 # Estructuras de datos del snapshot (inmutables para seguridad)
 # --------------------------------------------------------------------
 
-import logging
-logger = logging.getLogger(__name__)
+from utils.logs import setup_logger_json
+
+logger = setup_logger_json("DEBUG", "kp_gateway_selector.ruleset_compiler")
 
 @dataclass(frozen=True)
 class CompiledRule:

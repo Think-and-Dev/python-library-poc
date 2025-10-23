@@ -7,8 +7,9 @@ from .base import Matcher
 
 LogFn = Callable[[str], None]  # ej. logger.debug
 
-import logging
-logger = logging.getLogger(__name__)
+from utils.logs import setup_logger_json
+
+logger = setup_logger_json("DEBUG", "kp_gateway_selector.matchers.debug")
 
 @dataclass(frozen=True)
 class DebugWrap(Matcher):

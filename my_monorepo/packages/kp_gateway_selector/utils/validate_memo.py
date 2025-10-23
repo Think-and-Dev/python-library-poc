@@ -3,8 +3,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 import base64
 from itertools import cycle
-import logging
-logger = logging.getLogger(__name__)
+from utils.logs import logger
 
 SWAPIX_PUB_KEY = """\
 -----BEGIN PUBLIC KEY-----
