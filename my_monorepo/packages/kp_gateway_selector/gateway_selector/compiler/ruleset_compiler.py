@@ -3,10 +3,10 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, Protocol, Tuple
 
 from utils.pix_key_types import PixKeyTypes
-from gateway_selector_v2.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
+from gateway_selector.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
 
 from .rule_compiler import compile_predicate, Matcher
-from postgresql.gateway_selector_v2.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
+from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
 
 # --------------------------------------------------------------------
 # Estructuras de datos del snapshot (inmutables para seguridad)

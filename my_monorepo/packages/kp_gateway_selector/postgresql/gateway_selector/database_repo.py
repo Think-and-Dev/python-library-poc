@@ -1,8 +1,8 @@
 from typing import List, Any, Dict, Optional
 from sqlalchemy.orm import Session
 
-from gateway_selector_v2.compiler.ruleset_compiler import Repo
-from gateway_selector_v2.dtos import GatewaySelectorRuleSetDTO, GatewaySelectorRuleDTO, GatewaySelectorGatewayConfigDTO
+from gateway_selector.compiler.ruleset_compiler import Repo
+from gateway_selector.dtos import GatewaySelectorRuleSetDTO, GatewaySelectorRuleDTO, GatewaySelectorGatewayConfigDTO
 from .models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
 
 class DatabaseRepo(Repo):

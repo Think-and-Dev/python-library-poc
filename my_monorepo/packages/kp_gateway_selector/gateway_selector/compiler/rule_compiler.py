@@ -2,8 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Any, Tuple, Callable, Optional, List
 
-from gateway_selector_v2.matchers.base import Matcher, build_matcher
-from gateway_selector_v2.matchers.debug import DebugWrap
+from gateway_selector.matchers.base import Matcher, build_matcher
+from gateway_selector.matchers.debug import DebugWrap
 
 # --- Constantes útiles (evitan ifs en runtime) ---
 

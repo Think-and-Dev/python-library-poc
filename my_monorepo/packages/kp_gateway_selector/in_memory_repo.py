@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 
-from gateway_selector_v2.compiler.ruleset_compiler import Repo
-from gateway_selector_v2.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
+from gateway_selector.compiler.ruleset_compiler import Repo
+from gateway_selector.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
 
 class InMemoryRepo(Repo):
     """
