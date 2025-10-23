@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Callable, Protocol, Tuple
 
 from utils.pix_key_types import PixKeyTypes
-from gateway_selector.dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
+from dtos import GatewaySelectorGatewayConfigDTO, GatewaySelectorRuleDTO, GatewaySelectorRuleSetDTO
 
 from .rule_compiler import compile_predicate, Matcher
 from postgresql.gateway_selector.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet

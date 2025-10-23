@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import CheckConstraint, Column, ForeignKey, Index, Integer, String, Boolean, JSON, DateTime, UniqueConstraint
-from postgresql.database import Base
+from database import Base
 
 class GatewaySelectorRuleSet(Base):
     __tablename__ = "gateway_selector_rule_sets"
