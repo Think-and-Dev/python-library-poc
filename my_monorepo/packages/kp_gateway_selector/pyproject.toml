@@ -46,6 +46,7 @@ typing-extensions = ">=4.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
+regex = "^2024.0.0"
 
 [tool.poetry.scripts]
 test = "pytest:main"
