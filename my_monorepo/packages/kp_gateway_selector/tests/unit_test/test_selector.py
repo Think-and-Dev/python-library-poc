@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-# Imports from the new gateway selector v2 implementation
+# Imports from the new gateway selector implementation
 from kp_gateway_selector.gateway_selector.selector import select_gateway
 from kp_gateway_selector.gateway_selector.context import make_ctx
 from kp_gateway_selector.gateway_selector.compiler.ruleset_compiler import CompiledRuleset, CompiledRule
@@ -42,7 +42,7 @@ def _build_snapshot(
 
 class TestGatewaySelector:
     """
-    Test suite for the core logic of the gateway selector v2.
+    Test suite for the core logic of the gateway selector.
     """
 
     def setup_method(self):
