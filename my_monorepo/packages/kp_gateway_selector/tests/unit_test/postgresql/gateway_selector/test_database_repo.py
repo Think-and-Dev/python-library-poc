@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
-from kp_gateway_selector.postgresql.gateway_selector.database_repo import TestDatabaseRepo
+from kp_gateway_selector.postgresql.gateway_selector.database_repo import WritableDatabaseRepo
 from kp_gateway_selector.postgresql.gateway_selector.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
 from kp_gateway_selector.gateway_selector.dtos import GatewaySelectorRuleSetDTO, GatewaySelectorRuleDTO, GatewaySelectorGatewayConfigDTO
 
@@ -12,8 +12,8 @@ def mock_db_session():
 
 @pytest.fixture
 def database_repo(mock_db_session):
-    """Fixture for TestDatabaseRepo instance."""
-    return TestDatabaseRepo(mock_db_session)
+    """Fixture for WritableDatabaseRepo instance."""
+    return WritableDatabaseRepo(mock_db_session)
 
 @pytest.mark.anyio("asyncio")
 async def test_get_ruleset_by_id_found(database_repo, mock_db_session):
@@ -123,7 +123,7 @@ async def test_get_gateways_map_no_gateways(database_repo, mock_db_session):
     mock_db_session.query.assert_called_once_with(GatewaySelectorGatewayConfig)
     mock_db_session.query.return_value.all.assert_called_once()
 
-# --- Tests for TestDatabaseRepo helper methods ---
+# --- Tests for WritableDatabaseRepo helper methods ---
 
 def test_create_gateway_config_new(database_repo, mock_db_session):
     """Tests creating a new gateway configuration."""

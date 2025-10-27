@@ -27,7 +27,7 @@ class DatabaseRepo(Repo):
 
 # --- Added write operations for testing purposes ---
 
-class TestDatabaseRepo(DatabaseRepo):
+class WritableDatabaseRepo(DatabaseRepo):
     def __init__(self, db: Session):
         self.db = db
 
