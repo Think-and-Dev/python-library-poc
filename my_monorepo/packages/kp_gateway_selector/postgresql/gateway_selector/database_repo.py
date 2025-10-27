@@ -14,7 +14,7 @@ class DatabaseRepo(Repo):
         return GatewaySelectorRuleSetDTO.model_validate(result) if result is not None else None
 
     async def get_active_ruleset(self) -> Optional[GatewaySelectorRuleSetDTO]:
-        result = self.db.query(GatewaySelectorRuleSet).filter(GatewaySelectorRuleSet.is_active).first()        
+        result = self.db.query(GatewaySelectorRuleSet).filter(GatewaySelectorRuleSet.is_active).first()
         return GatewaySelectorRuleSetDTO.model_validate(result) if result is not None else None
 
     async def get_rules_for_ruleset(self, ruleset_id: int) -> List[GatewaySelectorRuleDTO]:

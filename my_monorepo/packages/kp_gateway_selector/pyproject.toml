@@ -14,6 +14,7 @@ dependencies = [
     "fastapi>=0.111",
     "typing-extensions>=4.7",
     "asgi-correlation-id>=4.0",
+    "attrs (>=25.4.0,<26.0.0)",
 ]
 
 [build-system]
