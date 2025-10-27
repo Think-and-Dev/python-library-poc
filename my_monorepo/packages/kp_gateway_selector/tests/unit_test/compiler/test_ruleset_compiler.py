@@ -89,6 +89,44 @@ async def test_compile_rule_simple_no_value(gateways_configs):
 
 
 @pytest.mark.anyio("asyncio")
+async def test_compile_rule_with_user_condition_value(gateways_configs, monkeypatch):
+    """Test compiling a rule with USER condition_type and valid condition_value."""
+    ruleset_dto = GatewaySelectorRuleSetDTO(id=1, name="test", is_active=True, sticky_salt="salt", default_gateway="E2E", version=1)
+    rules_dto = [
+        GatewaySelectorRuleDTO(id=1, rule_set_id=1, priority=1, name="rule1", enabled=True, condition_type="USER", condition_value="123", condition_json=None, action={"route": "FIXED", "gateway": "E2E"})
+    ]
+    repo = MockRepo(ruleset_dto, rules_dto, gateways_configs)
+
+    # Mock compile_predicate to avoid needing full matcher implementation
+    monkeypatch.setattr("kp_gateway_selector.gateway_selector.compiler.ruleset_compiler.compile_predicate", lambda *args, **kwargs: True)
+
+    compiled = await compile_ruleset(repo)
+
+    assert isinstance(compiled, CompiledRuleset)
+    assert compiled.ruleset_id == 1
+    assert len(compiled.rules) == 1
+
+
+@pytest.mark.anyio("asyncio")
+async def test_compile_rule_with_pix_key_condition_value(gateways_configs, monkeypatch):
+    """Test compiling a rule with PIX_KEY condition_type and valid condition_value."""
+    ruleset_dto = GatewaySelectorRuleSetDTO(id=1, name="test", is_active=True, sticky_salt="salt", default_gateway="E2E", version=1)
+    rules_dto = [
+        GatewaySelectorRuleDTO(id=1, rule_set_id=1, priority=1, name="rule1", enabled=True, condition_type="PIX_KEY", condition_value="test_key", condition_json=None, action={"route": "FIXED", "gateway": "CELCOIN"})
+    ]
+    repo = MockRepo(ruleset_dto, rules_dto, gateways_configs)
+
+    # Mock compile_predicate to avoid needing full matcher implementation
+    monkeypatch.setattr("kp_gateway_selector.gateway_selector.compiler.ruleset_compiler.compile_predicate", lambda *args, **kwargs: True)
+
+    compiled = await compile_ruleset(repo)
+
+    assert isinstance(compiled, CompiledRuleset)
+    assert compiled.ruleset_id == 1
+    assert len(compiled.rules) == 1
+
+
+@pytest.mark.anyio("asyncio")
 async def test_compile_invalid_default_gateway(gateways_configs):
     ruleset_dto = GatewaySelectorRuleSetDTO(id=1, name="test", is_active=True, sticky_salt="salt", default_gateway="UNKNOWN", version=1)
     repo = MockRepo(ruleset_dto, [], gateways_configs)

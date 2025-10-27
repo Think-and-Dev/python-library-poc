@@ -5,13 +5,7 @@ import logging
 from typing import Any, Optional
 import uuid
 
-try:
-    from asgi_correlation_id import CorrelationIdFilter
-except Exception:
-    import logging as _logging
-    class CorrelationIdFilter(_logging.Filter):
-        def filter(self, record):
-            return True
+from asgi_correlation_id import CorrelationIdFilter
 from kp_gateway_selector.postgresql.database import LOG_SOURCE
 
 

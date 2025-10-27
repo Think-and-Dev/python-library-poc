@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
-from kp_gateway_selector.postgresql.gateway_selector.database_repo import WritableDatabaseRepo
+from kp_gateway_selector.postgresql.gateway_selector.database_repo import DatabaseRepo, WritableDatabaseRepo
 from kp_gateway_selector.postgresql.gateway_selector.models import GatewaySelectorGatewayConfig, GatewaySelectorRule, GatewaySelectorRuleSet
 from kp_gateway_selector.gateway_selector.dtos import GatewaySelectorRuleSetDTO, GatewaySelectorRuleDTO, GatewaySelectorGatewayConfigDTO
 
@@ -14,6 +14,12 @@ def mock_db_session():
 def database_repo(mock_db_session):
     """Fixture for WritableDatabaseRepo instance."""
     return WritableDatabaseRepo(mock_db_session)
+
+
+def test_database_repo_init(mock_db_session):
+    """Test that DatabaseRepo can be instantiated directly."""
+    repo = DatabaseRepo(mock_db_session)
+    assert repo.db == mock_db_session
 
 @pytest.mark.anyio("asyncio")
 async def test_get_ruleset_by_id_found(database_repo, mock_db_session):
