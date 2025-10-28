@@ -1,0 +1,49 @@
+{
+  "gateways": [
+    {
+      "id": 101,
+      "name": "gateway_1",
+      "is_enabled": true
+    },
+    {
+      "id": 102,
+      "name": "gateway_2",
+      "is_enabled": true
+    },
+    {
+      "id": 103,
+      "name": "fallback_gw",
+      "is_enabled": true
+    }
+  ],
+  "ruleset": {
+    "name": "Sample Script Ruleset",
+    "is_active": true,
+    "default_gateway": "fallback_gw"
+  },
+  "rules": [
+    {
+      "priority": 10,
+      "name": "pix-key-ceviche-rule",
+      "condition_type": "PIX_KEY",
+      "condition_value": "ceviche@cevicherj.com.br",
+      "action": {
+        "route": "FIXED",
+        "gateway": "gateway_1"
+      }
+    },
+    {
+      "priority": 20,
+      "name": "pix-key-type-rule",
+      "condition_type": "PIX_KEY_TYPE",
+      "condition_value": "QRCODE_STATIC",
+      "action": {
+        "route": "WEIGHTED",
+        "weights": {
+          "gateway_1": 3,
+          "gateway_2": 97
+        }
+      }
+    }
+  ]
+}
