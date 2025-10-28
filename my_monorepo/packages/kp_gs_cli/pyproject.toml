@@ -1,0 +1,41 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "kp-gs-cli"
+version = "0.1.0"
+description = "CLI tool for managing and validating KP Gateway Selector rulesets"
+authors = ["KP team <devs@kp.com>"]
+readme = "README.md"
+packages = [{ include = "kp_gs_cli" }]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+typer = "^0.9.0"
+rich = "^13.0.0"
+click = "^8.1.7"  # Pin click to a version compatible with typer 0.9.0
+
+# Local development dependency
+# To use, first install kp-gateway-selector in development mode:
+# cd ../kp_gateway_selector && pip install -e .
+# Then install this package with: poetry install --with local
+
+[tool.poetry.group.local.dependencies]
+kp-gateway-selector = { path = "../kp_gateway_selector", develop = true }
+
+[tool.poetry.scripts]
+kp-gs = "kp_gs_cli.main:app"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.0.0"
+black = "^23.0.0"
+isort = "^5.12.0"
+mypy = "^1.0.0"
+flake8 = "^6.0.0"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
