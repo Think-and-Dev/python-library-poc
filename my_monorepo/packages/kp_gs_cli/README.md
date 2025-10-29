@@ -3,6 +3,7 @@
 A command-line interface for managing and validating KP Gateway Selector rulesets.
 
 ## Table of Contents
+
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -15,8 +16,6 @@ A command-line interface for managing and validating KP Gateway Selector ruleset
   - [Configuration](#configuration)
 - [Development](#development)
   - [Setup](#setup)
-  - [Running Tests](#running-tests)
-  - [Code Quality](#code-quality)
   - [Versioning](#versioning)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -24,11 +23,216 @@ A command-line interface for managing and validating KP Gateway Selector ruleset
 
 ## Features
 
-- ✅ Validate gateway selector rulesets
-- 📋 List available gateways
-- 🚀 Simple and intuitive CLI interface
-- 🧪 Comprehensive test suite
-- 🔧 Configurable through environment variables
+- ✅ **Ruleset Management**
+
+  - Create, validate, and manage rulesets
+  - Activate/deactivate rulesets with validation
+  - Export/import rulesets for backup or migration
+
+- 🔍 **Validation & Testing**
+
+  - Validate rulesets against test cases
+  - Process CSV files for batch testing
+  - Test rules locally without database access
+
+- 📊 **Database Operations**
+
+  - List all rulesets with status
+  - Add new rulesets from JSON definitions
+  - Delete rulesets (with safety checks)
+  - View detailed ruleset information
+
+- 🛠 **Developer Friendly**
+  - Simple and intuitive CLI interface
+  - Comprehensive test suite
+  - Configurable through environment variables
+  - Detailed error messages and logging
+
+## Quick Start
+
+1. First, set up your database connection by exporting the `DATABASE_URL` environment variable:
+
+   ```bash
+   export DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
+   ```
+
+   Replace the placeholders with your actual database credentials.
+
+2. You can now run any of the CLI commands, for example:
+
+   ```bash
+   # List all rulesets
+   poetry run kp-gs list
+   ```
+
+   Or specify the database URL directly in the command:
+
+   ```bash
+   DATABASE_URL="postgresql://username:password@localhost:5432/your_database" poetry run kp-gs list
+   ```
+
+## Command Reference
+
+This CLI tool provides commands for managing Gateway Selector V2 rulesets.
+
+### General Syntax
+
+All commands should be run using Poetry:
+
+```bash
+poetry run kp-gs [COMMAND] [ARGS]
+```
+
+### Available Commands
+
+#### `list`
+
+Lists all rulesets currently stored in the database, along with their status.
+
+**Usage:**
+
+```bash
+poetry run kp-gs list
+```
+
+#### `validate-ruleset`
+
+Compiles and validates a specific ruleset from the database to check for errors before activation.
+
+After a successful validation, the command will prompt you to optionally process a CSV file. This allows you to immediately test the validated ruleset against a batch of data.
+
+**Interactive Prompt Example:**
+
+```
+Do you want to process a CSV file with this validated ruleset? [y/N]: y
+Enter the path to the CSV file: resources/gateway_selector_examples_simple.csv
+```
+
+**Usage:**
+
+```bash
+poetry run kp-gs validate-ruleset <RULESET_ID>
+```
+
+**Example:**
+
+```bash
+poetry run kp-gs validate-ruleset 7
+```
+
+#### `validate-local-ruleset`
+
+Compiles and validates a local ruleset JSON file entirely in-memory, without interacting with the database. This is useful for quick "dry runs" and validating a new or modified ruleset file before adding it to the database.
+
+**Usage:**
+
+```bash
+poetry run kp-gs validate-local-ruleset <PATH_TO_JSON_FILE>
+```
+
+**Example:**
+
+```bash
+poetry run kp-gs validate-local-ruleset resources/sample_ruleset.json
+```
+
+#### `add`
+
+Adds a new ruleset, its associated gateways, and rules to the database from a JSON definition file.
+
+**Usage:**
+
+```bash
+poetry run kp-gs add <PATH_TO_JSON_FILE>
+```
+
+**Example:**
+
+```bash
+poetry run kp-gs add resources/sample_ruleset.json
+```
+
+#### `export`
+
+Exports a ruleset and its rules from the database to a JSON format. This is useful for backups or for migrating rulesets between environments.
+
+**Usage:**
+
+```bash
+poetry run kp-gs export <RULESET_ID> [OUTPUT_FILE_PATH]
+```
+
+**Example (print to console):**
+
+```bash
+poetry run kp-gs export 33
+```
+
+**Example (save to file):**
+
+```bash
+poetry run kp-gs export 33 my_ruleset.json
+```
+
+#### `delete`
+
+Deletes a ruleset and all of its associated rules from the database. For safety, it will ask for confirmation before deleting. It will not delete an active ruleset.
+
+**Usage:**
+
+```bash
+poetry run kp-gs delete <RULESET_ID>
+```
+
+**Example:**
+
+```bash
+poetry run kp-gs delete 7
+```
+
+To skip the confirmation prompt, use the `--force` or `-f` flag.
+
+#### `activate`
+
+Activates a specific ruleset, and deactivates any currently active one. For safety, this command will first validate the target ruleset and ask for confirmation before making any changes.
+
+**Usage:**
+
+```bash
+poetry run kp-gs activate <RULESET_ID>
+```
+
+**Example:**
+
+```bash
+poetry run kp-gs activate 7
+```
+
+To skip the confirmation prompt, use the `--force` or `-f` flag.
+
+#### `process-csv`
+
+Processes a CSV file to simulate gateway selection for each row against a given ruleset. This is useful for testing a ruleset against a batch of data.
+
+The CSV file must have `api_user_id`, `amount`, and `pix_key` columns with a `|` delimiter. It can also include an optional `gateway` column containing the expected gateway name for comparison.
+
+**Usage:**
+
+```bash
+poetry run kp-gs process-csv <PATH_TO_CSV> [--ruleset-id <RULESET_ID>]
+```
+
+**Example (using the active ruleset):**
+
+```bash
+poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv
+```
+
+**Example (using a specific ruleset):**
+
+```bash
+poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv --ruleset-id 7
+```
 
 ## Prerequisites
 
@@ -41,11 +245,13 @@ A command-line interface for managing and validating KP Gateway Selector ruleset
 ### Using Poetry (Recommended)
 
 1. Install Poetry if you haven't already:
+
    ```bash
    curl -sSL https://install.python-poetry.org | python3 -
    ```
 
 2. Clone the repository (if not already cloned):
+
    ```bash
    git clone https://your-repository-url.git
    cd my_monorepo/packages/kp_gs_cli
@@ -76,7 +282,7 @@ kp_gs_cli/
 ├── kp_gs_cli/           # Main package
 │   ├── __init__.py      # Package initialization
 │   └── main.py          # CLI entry point
-├── tests/               # Test files
+├── resources/           # Resources files
 ├── pyproject.toml       # Project configuration
 └── README.md            # This file
 ```
@@ -130,35 +336,6 @@ The CLI can be configured using environment variables:
    pre-commit install
    ```
 
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run tests with coverage
-pytest --cov=kp_gs_cli --cov-report=term-missing
-
-# Run a specific test file
-pytest tests/test_main.py
-```
-
-### Code Quality
-
-```bash
-# Format code
-black .
-
-# Sort imports
-isort .
-
-# Check for type errors
-mypy kp_gs_cli
-
-# Lint the code
-flake8 kp_gs_cli
-```
-
 ### Versioning
 
 This project uses [Semantic Versioning](https://semver.org/).
@@ -168,6 +345,7 @@ This project uses [Semantic Versioning](https://semver.org/).
 ### Common Issues
 
 1. **Dependency conflicts**
+
    - Try removing the virtual environment and reinstalling:
      ```bash
      poetry env remove python

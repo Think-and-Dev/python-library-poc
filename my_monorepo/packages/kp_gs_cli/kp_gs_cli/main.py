@@ -27,9 +27,15 @@ from kp_gateway_selector.postgresql import database as _dbmod
 from sqlalchemy import create_engine as _create_engine
 from sqlalchemy.orm import sessionmaker as _sessionmaker
 
-# DB URL precedence: CLI --db-url > env DATABASE_URL > default sqlite
+# DB URL precedence: CLI --db-url > env DATABASE_URL
 def _make_session_local(db_url: str | None):
-    url = db_url or os.getenv("DATABASE_URL") or "sqlite:///./gateway_selector.db"
+    if not db_url and not os.getenv("DATABASE_URL"):
+        raise ValueError(
+            "Database connection string is required. "
+            "Please set the DATABASE_URL environment variable or use the --db-url option.\n"
+            "Example: DATABASE_URL=postgresql://user:pass@localhost:5432/dbname"
+        )
+    url = db_url or os.getenv("DATABASE_URL")
     _dbmod.ENGINE = _create_engine(url, echo=False, pool_size=50, max_overflow=100)
     _dbmod.SessionLocal = _sessionmaker(bind=_dbmod.ENGINE)
     return _dbmod.SessionLocal
