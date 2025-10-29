@@ -1,6 +1,6 @@
-# KP Gateway Selector CLI
+# KP Payout Gateway Selector CLI
 
-A command-line interface for managing and validating KP Gateway Selector rulesets.
+A command-line interface for managing and validating KP Payout Gateway Selector rulesets.
 
 ## Table of Contents
 
@@ -62,13 +62,13 @@ A command-line interface for managing and validating KP Gateway Selector ruleset
 
    ```bash
    # List all rulesets
-   poetry run kp-gs list
+   poetry run pogs list
    ```
 
    Or specify the database URL directly in the command:
 
    ```bash
-   DATABASE_URL="postgresql://username:password@localhost:5432/your_database" poetry run kp-gs list
+   DATABASE_URL="postgresql://username:password@localhost:5432/your_database" poetry run pogs list
    ```
 
 ## Command Reference
@@ -80,7 +80,7 @@ This CLI tool provides commands for managing Gateway Selector V2 rulesets.
 All commands should be run using Poetry:
 
 ```bash
-poetry run kp-gs [COMMAND] [ARGS]
+poetry run pogs [COMMAND] [ARGS]
 ```
 
 ### Available Commands
@@ -92,7 +92,7 @@ Lists all rulesets currently stored in the database, along with their status.
 **Usage:**
 
 ```bash
-poetry run kp-gs list
+poetry run pogs list
 ```
 
 #### `validate-ruleset`
@@ -111,13 +111,13 @@ Enter the path to the CSV file: resources/gateway_selector_examples_simple.csv
 **Usage:**
 
 ```bash
-poetry run kp-gs validate-ruleset <RULESET_ID>
+poetry run pogs validate-ruleset <RULESET_ID>
 ```
 
 **Example:**
 
 ```bash
-poetry run kp-gs validate-ruleset 7
+poetry run pogs validate-ruleset 7
 ```
 
 #### `validate-local-ruleset`
@@ -127,13 +127,13 @@ Compiles and validates a local ruleset JSON file entirely in-memory, without int
 **Usage:**
 
 ```bash
-poetry run kp-gs validate-local-ruleset <PATH_TO_JSON_FILE>
+poetry run pogs validate-local-ruleset <PATH_TO_JSON_FILE>
 ```
 
 **Example:**
 
 ```bash
-poetry run kp-gs validate-local-ruleset resources/sample_ruleset.json
+poetry run pogs validate-local-ruleset resources/sample_ruleset.json
 ```
 
 #### `add`
@@ -143,13 +143,13 @@ Adds a new ruleset, its associated gateways, and rules to the database from a JS
 **Usage:**
 
 ```bash
-poetry run kp-gs add <PATH_TO_JSON_FILE>
+poetry run pogs add <PATH_TO_JSON_FILE>
 ```
 
 **Example:**
 
 ```bash
-poetry run kp-gs add resources/sample_ruleset.json
+poetry run pogs add resources/sample_ruleset.json
 ```
 
 #### `export`
@@ -159,19 +159,19 @@ Exports a ruleset and its rules from the database to a JSON format. This is usef
 **Usage:**
 
 ```bash
-poetry run kp-gs export <RULESET_ID> [OUTPUT_FILE_PATH]
+poetry run pogs export <RULESET_ID> [OUTPUT_FILE_PATH]
 ```
 
 **Example (print to console):**
 
 ```bash
-poetry run kp-gs export 33
+poetry run pogs export 33
 ```
 
 **Example (save to file):**
 
 ```bash
-poetry run kp-gs export 33 my_ruleset.json
+poetry run pogs export 33 my_ruleset.json
 ```
 
 #### `delete`
@@ -181,13 +181,13 @@ Deletes a ruleset and all of its associated rules from the database. For safety,
 **Usage:**
 
 ```bash
-poetry run kp-gs delete <RULESET_ID>
+poetry run pogs delete <RULESET_ID>
 ```
 
 **Example:**
 
 ```bash
-poetry run kp-gs delete 7
+poetry run pogs delete 7
 ```
 
 To skip the confirmation prompt, use the `--force` or `-f` flag.
@@ -199,13 +199,13 @@ Activates a specific ruleset, and deactivates any currently active one. For safe
 **Usage:**
 
 ```bash
-poetry run kp-gs activate <RULESET_ID>
+poetry run pogs activate <RULESET_ID>
 ```
 
 **Example:**
 
 ```bash
-poetry run kp-gs activate 7
+poetry run pogs activate 7
 ```
 
 To skip the confirmation prompt, use the `--force` or `-f` flag.
@@ -219,19 +219,19 @@ The CSV file must have `api_user_id`, `amount`, and `pix_key` columns with a `|`
 **Usage:**
 
 ```bash
-poetry run kp-gs process-csv <PATH_TO_CSV> [--ruleset-id <RULESET_ID>]
+poetry run pogs process-csv <PATH_TO_CSV> [--ruleset-id <RULESET_ID>]
 ```
 
 **Example (using the active ruleset):**
 
 ```bash
-poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv
+poetry run pogs process-csv resources/gateway_selector_examples_simple.csv
 ```
 
 **Example (using a specific ruleset):**
 
 ```bash
-poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv --ruleset-id 7
+poetry run pogs process-csv resources/gateway_selector_examples_simple.csv --ruleset-id 7
 ```
 
 ## Prerequisites
@@ -254,7 +254,7 @@ poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv --ru
 
    ```bash
    git clone https://your-repository-url.git
-   cd my_monorepo/packages/kp_gs_cli
+   cd my_monorepo/packages/pogs_cli
    ```
 
 3. Install the package and its dependencies:
@@ -266,7 +266,7 @@ poetry run kp-gs process-csv resources/gateway_selector_examples_simple.csv --ru
 
 ```bash
 # Navigate to the project directory
-cd my_monorepo/packages/kp_gs_cli
+cd my_monorepo/packages/pogs_cli
 
 # Install the package in development mode
 pip install -e .
@@ -278,8 +278,8 @@ pip install -e ".[dev]"
 ## Project Structure
 
 ```
-kp_gs_cli/
-├── kp_gs_cli/           # Main package
+pogs_cli/
+├── pogs_cli/           # Main package
 │   ├── __init__.py      # Package initialization
 │   └── main.py          # CLI entry point
 ├── resources/           # Resources files
@@ -293,34 +293,34 @@ kp_gs_cli/
 
 ```bash
 # Show help
-poetry run kp-gs --help
+poetry run pogs --help
 
 # Show version
-poetry run kp-gs version
+poetry run pogs version
 
 # Validate a ruleset file
-poetry run kp-gs validate path/to/ruleset.json
+poetry run pogs validate path/to/ruleset.json
 
 # List available gateways
-poetry run kp-gs list-gateways
+poetry run pogs list-gateways
 ```
 
 ### Examples
 
 ```bash
 # Validate a ruleset with verbose output
-poetry run kp-gs validate --verbose path/to/ruleset.json
+poetry run pogs validate --verbose path/to/ruleset.json
 
 # List gateways in JSON format
-poetry run kp-gs list-gateways --format json
+poetry run pogs list-gateways --format json
 ```
 
 ### Configuration
 
 The CLI can be configured using environment variables:
 
-- `KP_GS_LOG_LEVEL`: Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-- `KP_GS_CONFIG_PATH`: Path to a custom configuration file
+- `pogs_LOG_LEVEL`: Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+- `pogs_CONFIG_PATH`: Path to a custom configuration file
 
 ## Development
 

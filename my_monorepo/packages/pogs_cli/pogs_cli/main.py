@@ -115,7 +115,7 @@ def _run_csv_processing(snapshot: CompiledRuleset, csv_file: pathlib.Path):
 @app.command()
 def version():
     """Show the current version of the KP Gateway Selector CLI."""
-    from kp_gs_cli import __version__
+    from pogs_cli import __version__
     console.print(f"KP Gateway Selector CLI v{__version__}", style="bold green")
 
 
